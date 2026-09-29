@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { TodoList } from "@/components/TodoList";
+import { NotePad } from "@/components/NotePad";
 import { PageHeader } from "@/components/PageHeader";
 import { formatLongDate, useLocalStore, weekRange } from "@/lib/local-store";
 
@@ -48,16 +49,10 @@ function Dashboard() {
         subtitle="Your personal command center, everything in one place."
       />
 
-      <div className="card-leaf fade-up flex flex-wrap items-center justify-between gap-3 p-5">
+      <div className="card-leaf fade-up p-5">
         <p className="font-display text-xl text-forest sm:text-2xl">
           {now ? formatLongDate(now) : "\u00A0"}
         </p>
-        <Link
-          to="/navigation"
-          className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
-        >
-          🧭 Go to Navigation
-        </Link>
       </div>
 
       <TodoList
@@ -73,6 +68,19 @@ function Dashboard() {
         subtitle="Monday to Sunday"
         starter={["Finish Algorithms worksheet", "Plan next week's study blocks"]}
       />
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <NotePad
+          storageKey="eshan.braindump"
+          title="🧠 Brain Dump"
+          placeholder="Dump random thoughts here..."
+        />
+        <NotePad
+          storageKey="eshan.ideas"
+          title="💡 Ideas"
+          placeholder="Ideas or things you want to explore..."
+        />
+      </div>
 
       <section className="card-leaf fade-up p-5 sm:p-6">
         <h2 className="text-xl font-semibold text-forest">🍃 Reminders</h2>

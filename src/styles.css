@@ -136,3 +136,24 @@
     transform: none;
   }
 }
+
+:root {
+  --pill-grey: oklch(0.9 0.008 90);
+  --pill-grey-fg: oklch(0.42 0.01 90);
+  --pill-blue: oklch(0.9 0.05 240);
+  --pill-blue-fg: oklch(0.4 0.1 245);
+  --pill-yellow: oklch(0.93 0.08 95);
+  --pill-yellow-fg: oklch(0.45 0.09 80);
+  --pill-green: oklch(0.9 0.06 150);
+  --pill-green-fg: oklch(0.38 0.08 150);
+}
+@theme inline {
+  --color-pill-grey: var(--pill-grey);
+  --color-pill-grey-fg: var(--pill-grey-fg);
+  --color-pill-blue: var(--pill-blue);
+  --color-pill-blue-fg: var(--pill-blue-fg);
+  --color-pill-yellow: var(--pill-yellow);
+  --color-pill-yellow-fg: var(--pill-yellow-fg);
+  --color-pill-green: var(--pill-green);
+  --color-pill-green-fg: var(--pill-green-fg);
+}
