@@ -53,7 +53,7 @@ const dayLabel = (date: string, opts: Intl.DateTimeFormatOptions) =>
 
 const GOAL = 8;
 
-function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
+function Stat({ label, value, hint }: { label: string; value: string; hint?: string | undefined }) {
   return (
     <div className="card-leaf p-4">
       <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
