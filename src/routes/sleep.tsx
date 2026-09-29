@@ -37,8 +37,8 @@ const starter: Entry[] = [
 ];
 
 function hours(bed: string, wake: string) {
-  const [bh, bm] = bed.split(":").map(Number);
-  const [wh, wm] = wake.split(":").map(Number);
+  const [bh = NaN, bm = NaN] = bed.split(":").map(Number);
+  const [wh = NaN, wm = NaN] = wake.split(":").map(Number);
   if ([bh, bm, wh, wm].some((n) => Number.isNaN(n))) return 0;
   let mins = wh * 60 + wm - (bh * 60 + bm);
   if (mins < 0) mins += 24 * 60;

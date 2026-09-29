@@ -68,7 +68,7 @@ function dueLabel(n: number) {
 
 function UniversityPage() {
   const [items, setItems] = useLocalStore<Assignment[]>("eshan.university", starter);
-  const [open, setOpen] = useState<string | null>(modules[0]);
+  const [open, setOpen] = useState<string | null>(modules[0] ?? null);
   const [draft, setDraft] = useState({ title: "", due: inDays(7) });
 
   const upcoming = items
