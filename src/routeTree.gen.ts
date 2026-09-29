@@ -10,33 +10,73 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NavigationRouteImport } from './routes/navigation'
+import { Route as SkillsRouteImport } from './routes/skills'
+import { Route as SleepRouteImport } from './routes/sleep'
+import { Route as UniversityRouteImport } from './routes/university'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NavigationRoute = NavigationRouteImport.update({
+  id: '/navigation',
+  path: '/navigation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SkillsRoute = SkillsRouteImport.update({
+  id: '/skills',
+  path: '/skills',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SleepRoute = SleepRouteImport.update({
+  id: '/sleep',
+  path: '/sleep',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UniversityRoute = UniversityRouteImport.update({
+  id: '/university',
+  path: '/university',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/navigation': typeof NavigationRoute
+  '/skills': typeof SkillsRoute
+  '/sleep': typeof SleepRoute
+  '/university': typeof UniversityRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/navigation': typeof NavigationRoute
+  '/skills': typeof SkillsRoute
+  '/sleep': typeof SleepRoute
+  '/university': typeof UniversityRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/navigation': typeof NavigationRoute
+  '/skills': typeof SkillsRoute
+  '/sleep': typeof SleepRoute
+  '/university': typeof UniversityRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/navigation' | '/skills' | '/sleep' | '/university'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/navigation' | '/skills' | '/sleep' | '/university'
+  id: '__root__' | '/' | '/navigation' | '/skills' | '/sleep' | '/university'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  NavigationRoute: typeof NavigationRoute
+  SkillsRoute: typeof SkillsRoute
+  SleepRoute: typeof SleepRoute
+  UniversityRoute: typeof UniversityRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +88,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/navigation': {
+      id: '/navigation'
+      path: '/navigation'
+      fullPath: '/navigation'
+      preLoaderRoute: typeof NavigationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skills': {
+      id: '/skills'
+      path: '/skills'
+      fullPath: '/skills'
+      preLoaderRoute: typeof SkillsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sleep': {
+      id: '/sleep'
+      path: '/sleep'
+      fullPath: '/sleep'
+      preLoaderRoute: typeof SleepRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/university': {
+      id: '/university'
+      path: '/university'
+      fullPath: '/university'
+      preLoaderRoute: typeof UniversityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  NavigationRoute: NavigationRoute,
+  SkillsRoute: SkillsRoute,
+  SleepRoute: SleepRoute,
+  UniversityRoute: UniversityRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
