@@ -72,17 +72,14 @@ export function WeeklyTimetable() {
           <thead>
             <tr className="bg-primary text-primary-foreground">
               <th className="w-36 border-r border-primary-foreground/20 p-0">
-                <span className="block px-3 py-3 text-left text-sm font-semibold">Time</span>
+                <span className="block px-3 py-3 text-left text-sm font-semibold">Day</span>
               </th>
-              {timetable.days.map((day, index) => (
-                <th
-                  key={index}
-                  className={index === todayIndex ? "bg-secondary text-secondary-foreground" : ""}
-                >
+              {timetable.rows.map((row, rowIndex) => (
+                <th key={rowIndex} className="border-r border-primary-foreground/20 p-0 last:border-r-0">
                   <input
-                    value={day}
-                    onChange={(event) => updateDay(index, event.target.value)}
-                    aria-label={`Edit day ${index + 1}`}
+                    value={row.time}
+                    onChange={(event) => updateTime(rowIndex, event.target.value)}
+                    aria-label={`Edit time row ${rowIndex + 1}`}
                     className="w-full bg-transparent px-3 py-3 text-center text-sm font-semibold outline-none focus:ring-2 focus:ring-inset focus:ring-ring"
                   />
                 </th>
@@ -90,30 +87,33 @@ export function WeeklyTimetable() {
             </tr>
           </thead>
           <tbody>
-            {timetable.rows.map((row, rowIndex) => (
-              <tr key={rowIndex} className="border-t border-border">
+            {timetable.days.map((day, dayIndex) => (
+              <tr
+                key={dayIndex}
+                className={dayIndex === todayIndex ? "border-t border-border bg-secondary/70" : "border-t border-border"}
+              >
                 <th className="border-r border-border bg-muted/70 p-0">
                   <input
-                    value={row.time}
-                    onChange={(event) => updateTime(rowIndex, event.target.value)}
-                    aria-label={`Edit time row ${rowIndex + 1}`}
-                    className={`${cellInput} font-medium text-forest`}
+                    value={day}
+                    onChange={(event) => updateDay(dayIndex, event.target.value)}
+                    aria-label={`Edit day ${dayIndex + 1}`}
+                    className={`${cellInput} font-semibold uppercase text-forest`}
                   />
                 </th>
-                {row.cells.map((cell, columnIndex) => (
+                {timetable.rows.map((row, rowIndex) => (
                   <td
-                    key={columnIndex}
+                    key={rowIndex}
                     className={
-                      columnIndex === todayIndex
-                        ? "border-r border-border bg-secondary/70 p-0 last:border-r-0"
+                      dayIndex === todayIndex
+                        ? "border-r border-border bg-secondary/40 p-0 last:border-r-0"
                         : "border-r border-border bg-background/60 p-0 last:border-r-0 even:bg-muted/40"
                     }
                   >
                     <input
-                      value={cell}
-                      onChange={(event) => updateCell(rowIndex, columnIndex, event.target.value)}
+                      value={row.cells[dayIndex] ?? ""}
+                      onChange={(event) => updateCell(rowIndex, dayIndex, event.target.value)}
                       placeholder="Add class…"
-                      aria-label={`${timetable.days[columnIndex] || `Day ${columnIndex + 1}`}, ${row.time}`}
+                      aria-label={`${day || `Day ${dayIndex + 1}`}, ${row.time}`}
                       className={cellInput}
                     />
                   </td>
