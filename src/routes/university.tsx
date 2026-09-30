@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Trash2, Plus } from "lucide-react";
 import { Empty, PageHeader } from "@/components/PageHeader";
+import { WeeklyTimetable } from "@/components/WeeklyTimetable";
 import { uid, useLocalStore } from "@/lib/local-store";
 
 export const Route = createFileRoute("/university")({
@@ -89,6 +90,8 @@ function UniversityPage() {
         title="University"
         subtitle="BSc Computer Science, Year 1 · Semester 1"
       />
+
+      <WeeklyTimetable />
 
       <section className="card-leaf fade-up p-5 sm:p-6">
         <h2 className="text-xl font-semibold text-forest">Upcoming deadlines</h2>

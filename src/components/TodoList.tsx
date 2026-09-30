@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Trash2, Plus } from "lucide-react";
 import { uid, useLocalStore } from "@/lib/local-store";
 import { Empty } from "./PageHeader";
+import { Button } from "./ui/button";
 
 export type Task = { id: string; text: string; done: boolean };
 
@@ -11,12 +12,16 @@ export function TodoList({
   subtitle,
   helper,
   starter,
+  inputPlaceholder = "Add a task…",
+  emptyMessage = "Nothing here yet, add your first task 🌱",
 }: {
   storageKey: string;
   title: string;
   subtitle?: string;
   helper?: string;
   starter: string[];
+  inputPlaceholder?: string;
+  emptyMessage?: string;
 }) {
   const [tasks, setTasks] = useLocalStore<Task[]>(
     storageKey,
@@ -24,13 +29,24 @@ export function TodoList({
   );
   const [draft, setDraft] = useState("");
 
-  const done = tasks.filter((t) => t.done).length;
+  const normalize = (value: Task[] | Record<string, boolean>): Task[] =>
+    Array.isArray(value)
+      ? value
+      : starter.map((text) => ({ id: uid(), text, done: Boolean(value[text]) }));
+
+  const safeTasks = normalize(tasks as Task[] | Record<string, boolean>);
+
+  useEffect(() => {
+    if (!Array.isArray(tasks)) setTasks(normalize(tasks as unknown as Record<string, boolean>));
+  }, [tasks, setTasks]);
+
+  const done = safeTasks.filter((t) => t.done).length;
 
   const add = (e: React.FormEvent) => {
     e.preventDefault();
     const text = draft.trim();
     if (!text) return;
-    setTasks((prev) => [...prev, { id: uid(), text, done: false }]);
+    setTasks((prev) => [...normalize(prev), { id: uid(), text, done: false }]);
     setDraft("");
   };
 
@@ -39,7 +55,7 @@ export function TodoList({
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="text-xl font-semibold text-forest">{title}</h2>
         <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">
-          {done}/{tasks.length} done
+          {done}/{safeTasks.length} done
         </span>
       </div>
       {subtitle ? (
@@ -50,24 +66,24 @@ export function TodoList({
         <input
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
-          placeholder="Add a task…"
+          placeholder={inputPlaceholder}
           className="min-w-0 flex-1 rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
         />
-        <button
+        <Button
           type="submit"
-          className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+          className="h-auto rounded-lg px-3 py-2"
         >
           <Plus className="size-4" /> Add
-        </button>
+        </Button>
       </form>
 
       <ul className="mt-4 space-y-2">
-        {tasks.length === 0 ? (
+        {safeTasks.length === 0 ? (
           <li>
-            <Empty>Nothing here yet, add your first task 🌱</Empty>
+            <Empty>{emptyMessage}</Empty>
           </li>
         ) : (
-          tasks.map((t) => (
+          safeTasks.map((t) => (
             <li
               key={t.id}
               className="flex items-center gap-3 rounded-lg bg-muted/60 px-3 py-2"
@@ -77,7 +93,7 @@ export function TodoList({
                 checked={t.done}
                 onChange={() =>
                   setTasks((prev) =>
-                    prev.map((p) =>
+                    normalize(prev).map((p) =>
                       p.id === t.id ? { ...p, done: !p.done } : p,
                     ),
                   )
@@ -92,15 +108,18 @@ export function TodoList({
               >
                 {t.text}
               </span>
-              <button
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
                 aria-label={`Delete ${t.text}`}
                 onClick={() =>
-                  setTasks((prev) => prev.filter((p) => p.id !== t.id))
+                  setTasks((prev) => normalize(prev).filter((p) => p.id !== t.id))
                 }
-                className="rounded-md p-1 text-muted-foreground hover:text-destructive"
+                className="size-7 text-muted-foreground hover:text-destructive"
               >
                 <Trash2 className="size-4" />
-              </button>
+              </Button>
             </li>
           ))
         )}
@@ -112,12 +131,15 @@ export function TodoList({
         ) : (
           <span />
         )}
-        <button
-          onClick={() => setTasks((prev) => prev.filter((p) => !p.done))}
-          className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-forest hover:bg-secondary"
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => setTasks((prev) => normalize(prev).filter((p) => !p.done))}
+          className="text-forest"
         >
           Clear completed
-        </button>
+        </Button>
       </div>
     </section>
   );
