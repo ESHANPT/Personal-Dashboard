@@ -24,12 +24,12 @@ export const Route = createFileRoute("/university")({
 });
 
 const modules = [
-  "Programming",
-  "Mathematics for Computing",
-  "Algorithms and Data Types",
-  "Computer Architecture",
-  "Information Systems and Databases",
-  "Data Communications",
+  "Assignments",
+  "Homeworks",
+  "Exams",
+  "Internships",
+  "Projects",
+  "Events",
 ];
 
 type Assignment = {
