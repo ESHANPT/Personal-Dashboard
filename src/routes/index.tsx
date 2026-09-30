@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { TodoList } from "@/components/TodoList";
 import { NotePad } from "@/components/NotePad";
 import { PageHeader } from "@/components/PageHeader";
-import { formatLongDate, useLocalStore, weekRange } from "@/lib/local-store";
+import { formatLongDate, weekRange } from "@/lib/local-store";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,14 +24,8 @@ export const Route = createFileRoute("/")({
   component: Dashboard,
 });
 
-const reminders = ["Daily checklist", "Daily reflection"];
-
 function Dashboard() {
   const [now, setNow] = useState<Date | null>(null);
-  const [checks, setChecks] = useLocalStore<Record<string, boolean>>(
-    "eshan.reminders",
-    {},
-  );
 
   useEffect(() => {
     setNow(new Date());
@@ -82,30 +76,13 @@ function Dashboard() {
         />
       </div>
 
-      <section className="card-leaf fade-up p-5 sm:p-6">
-        <h2 className="text-xl font-semibold text-forest">🍃 Reminders</h2>
-        <ul className="mt-4 space-y-2">
-          {reminders.map((r) => (
-            <li
-              key={r}
-              className="flex items-center gap-3 rounded-lg bg-muted/60 px-3 py-2"
-            >
-              <input
-                type="checkbox"
-                checked={Boolean(checks[r])}
-                onChange={() =>
-                  setChecks((prev) => ({ ...prev, [r]: !prev[r] }))
-                }
-                className="size-4 accent-[var(--moss)]"
-                aria-label={r}
-              />
-              <span className={checks[r] ? "text-sm line-through opacity-60" : "text-sm"}>
-                {r}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <TodoList
+        storageKey="eshan.reminders"
+        title="🍃 Reminders"
+        starter={["Daily checklist", "Daily reflection"]}
+        inputPlaceholder="Add a reminder..."
+        emptyMessage="No reminders, you're all clear 🌱"
+      />
     </div>
   );
 }
